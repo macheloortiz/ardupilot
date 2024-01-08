@@ -21,8 +21,8 @@ WorldInfo {
   FPS 20
 }
 Viewpoint {
-  orientation 0.10264123808602478 -0.7648124131744727 -0.6360241732028804 5.867275660921915
-  position -2.488925008027789 0.29237831017431365 2.067754838508868
+  orientation -0.08983892055611123 -0.02969228966773966 0.995513604270479 3.777325299404198
+  position 1.217037677764462 2.2404954274190825 1.022599441000403
   follow "Iris"
   followSmoothness 0.01
 }
@@ -84,7 +84,16 @@ Table {
   translation 0 0.92 0
 }
 Iris {
-  translation 0.0702495 1.45039 0.8
+  hidden linearVelocity_0 1.1826888315211503e-10 8.6214208529204e-10 5.4396805977916306e-11
+  hidden angularVelocity_0 1.1243847047704685e-09 -2.57615014023143e-10 2.0521650292989826e-09
+  hidden linearVelocity_1 7.470190741149251e-10 2.085954651542206e-09 7.854523032500353e-11
+  hidden angularVelocity_1 -5.875464635861374e-09 -2.710607066114359e-10 1.0600514694516434e-07
+  hidden linearVelocity_2 4.491495392071986e-10 2.9766099005794037e-09 4.6071103719924205e-11
+  hidden angularVelocity_2 -5.854330028661887e-09 -2.474656654426283e-10 1.0596826869757202e-07
+  hidden linearVelocity_3 -1.4054447800477593e-10 3.891055130391601e-09 -1.9339121317726857e-12
+  hidden angularVelocity_3 -2.828369930072194e-07 -3.059056513828245e-10 8.716531288034931e-08
+  translation 0.0654297681014562 1.4503750028273734 0.8107462179779619
+  rotation 0.00021243147858502283 -0.9999957254446683 0.0029161559043809735 0.06763073852364089
   controller "ardupilot_vehicle_controller"
   controllerArgs [
     "--motors"
@@ -95,11 +104,163 @@ Iris {
     "5599"
   ]
   extensionSlot [
-    Camera {
-      translation 0.05 0 0.05
-      rotation 0 1 0 0
-      width 640
-      height 480
+    Transform {
+      translation 0 0 -0.03
+      children [
+        DEF CAMERA_YAW HingeJoint {
+          jointParameters HingeJointParameters {
+            position -2.0254374177852696e-08
+            axis 0 0 1
+            anchor 0.0412774 -0.00469654 -0.00405862
+          }
+          device [
+            RotationalMotor {
+              name "camera yaw"
+              minPosition -1.7
+              maxPosition 1.7
+            }
+            PositionSensor {
+              name "camera yaw sensor"
+            }
+          ]
+          endPoint Solid {
+            translation 0.0412774 -0.00469654 -0.00405862
+            children [
+              Shape {
+                appearance DEF METAL_APPEARANCE PBRAppearance {
+                  roughness 0.5
+                }
+                geometry Mesh {
+                  url [
+                    "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/camera_yaw.obj"
+                  ]
+                }
+              }
+              DEF CAMERA_PITCH HingeJoint {
+                jointParameters HingeJointParameters {
+                  position 1.6772385173332406e-07
+                  axis 0 1 0
+                  anchor 0.000625212 -0.00530346 -0.0207448
+                }
+                device [
+                  RotationalMotor {
+                    name "camera pitch"
+                    minPosition -0.5
+                    maxPosition 1.7
+                  }
+                  PositionSensor {
+                    name "camera pitch sensor"
+                  }
+                ]
+                endPoint Solid {
+                  translation 0.000625212 -0.00530346 -0.0207448
+                  rotation 0 0.9999999999999999 0 1.6858739404357617e-07
+                  children [
+                    Shape {
+                      appearance USE METAL_APPEARANCE
+                      geometry Mesh {
+                        url [
+                          "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/camera_pitch.obj"
+                        ]
+                      }
+                    }
+                    DEF CAMERA_ROLL HingeJoint {
+                      jointParameters HingeJointParameters {
+                        position -2.7597341501781813e-08
+                        anchor 0.00754686 0.0160388 -0.00586401
+                      }
+                      device [
+                        RotationalMotor {
+                          name "camera roll"
+                          minPosition -0.5
+                          maxPosition 0.5
+                        }
+                        PositionSensor {
+                          name "camera roll sensor"
+                        }
+                      ]
+                      endPoint Solid {
+                        translation 0.00754686 0.0160388 -0.00586401
+                        rotation -1 0 0 2.9802322387695313e-08
+                        children [
+                          Shape {
+                            appearance USE METAL_APPEARANCE
+                            geometry Mesh {
+                              url [
+                                "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/camera_chassis.obj"
+                              ]
+                            }
+                          }
+                          Shape {
+                            appearance DEF GLASS PBRAppearance {
+                              baseColor 0.523146 0.8 0.627785
+                              transparency 0.9
+                              roughness 0.5
+                              metalness 0
+                            }
+                            geometry Mesh {
+                              url [
+                                "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/robots/dji/mavic/protos/Mavic2Pro/meshes/camera_lens.obj"
+                              ]
+                            }
+                          }
+                          DEF CAMERA_SLOT Transform {
+                            children [
+                              Camera {
+                                width 400
+                                height 240
+                              }
+                            ]
+                          }
+                        ]
+                        name "camera roll"
+                        boundingObject Transform {
+                          translation -0.00915058 -1.86265e-08 -0.000983764
+                          children [
+                            Box {
+                              size 0.0236511 0.0205141 0.0225186
+                            }
+                          ]
+                        }
+                        physics Physics {
+                          density -1
+                          mass 0.0333
+                        }
+                      }
+                    }
+                  ]
+                  name "camera pitch"
+                  boundingObject Transform {
+                    translation -0.00248347 0.00776876 0.00183829
+                    children [
+                      Box {
+                        size 0.0239878 0.0349393 0.0314891
+                      }
+                    ]
+                  }
+                  physics Physics {
+                    density -1
+                    mass 0.0333
+                  }
+                }
+              }
+            ]
+            name "camera yaw"
+            boundingObject Transform {
+              translation -1.86265e-09 -0.00304481 -0.0140589
+              children [
+                Box {
+                  size 0.0208626 0.0260333 0.0307844
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 0.0333
+            }
+          }
+        }
+      ]
     }
   ]
 }
